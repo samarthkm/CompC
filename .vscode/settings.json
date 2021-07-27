@@ -1,0 +1,7 @@
+{
+    "files.associations": {
+        "data.h": "c",
+        "parse.h": "c",
+        "stdio.h": "c"
+    }
+}
