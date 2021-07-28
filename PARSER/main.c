@@ -2,10 +2,11 @@
 
 expression e;
 
-int main() {
-    scan(&e);
-    // node* n = parse();
-    // printf("%d\n",evalTree(n));
-    exit(0);
+void main(int argc, char *argv[]) {
+  inp = fopen(argv[1], "r");
+  scan(&e);
+  node* n = parse();
+  printf("%d\n",evalTree(n));
+  exit(0);
 }
 

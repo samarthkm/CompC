@@ -5,6 +5,8 @@
 #include<stdlib.h>
 #include "lexInit.h"
 
+char *ops[] = { "+", "-", "*", "/", "INTEGER" };
+
 static void Back(int cb) {
     back=cb;
 }
@@ -63,7 +65,8 @@ int scan(expression *e) {
                   break;
         case '*': e->op = MUL;
                   break;
-        case EOF: return 0;
+        case EOF: //e->op = NA; /*test*/
+                  return 0;
         default : if(ch>='0' && ch<='9') {
                     e->val = convertToInteger(ch);
                     e->op = INT;
@@ -73,9 +76,19 @@ int scan(expression *e) {
                       exit(1);
                     }
                   break;
-
     }
     return 1;
+}
+
+static void scInp() {
+  expression e;
+
+  while (scan(&e)) {
+    printf("Token %s", ops[e.op]);
+    if (INT==e.op)
+      printf(", value %d", e.val);
+    printf("\n");
+  }
 }
 
 #endif
