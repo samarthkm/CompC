@@ -1,5 +1,3 @@
-
-
 #ifndef LEXINIT_H
 #define LEXINIT_H
 #include <stdio.h>

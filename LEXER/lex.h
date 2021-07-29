@@ -7,11 +7,11 @@
 
 char *ops[] = { "+", "-", "*", "/", "INTEGER" };
 
-static void Back(int cb) {
+void Back(int cb) {
     back=cb;
 }
 
-static int nextChar() {
+int nextChar() {
     int cb;
     if(back){
         cb=back;
@@ -24,23 +24,23 @@ static int nextChar() {
     return cb;
 }
 
-static int skipWhitespace() {
+int skipWhitespace() {
     int cb=nextChar();
     while(cb==' '||cb=='\n'||cb=='\r'||cb=='\t'||cb=='\f') cb = nextChar();
     return cb;
 }
 
-static int chrint(int c,char* str) {
+int chrint(int c,char* str) {
     char* ptr = strchr(str,c);
     if(ptr) {
-        return ptr -str;
+        return ptr-str;
     }
     else {
         return -1;
     }
 }
 
-static int convertToInteger(int ch) {
+int convertToInteger(int ch) {
     int a;
     int v = 0;
     char *str = "0123456789";
@@ -65,14 +65,14 @@ int scan(expression *e) {
                   break;
         case '*': e->op = MUL;
                   break;
-        case EOF: //e->op = NA; /*test*/
+        case EOF: e->op = NA; /*test*/
                   return 0;
         default : if(ch>='0' && ch<='9') {
                     e->val = convertToInteger(ch);
                     e->op = INT;
                     }
                   else {
-                      printf("Character %c (line %d) is not an integer literal, whitespace or operator",ch,line);
+                      printf("Character '%c' (line %d) is not an integer literal, whitespace or operator",ch,line+1);
                       exit(1);
                     }
                   break;
@@ -80,10 +80,9 @@ int scan(expression *e) {
     return 1;
 }
 
-static void scInp() {
+void scInp() {
   expression e;
-
-  while (scan(&e)) {
+    while (scan(&e)) {
     printf("Token %s", ops[e.op]);
     if (INT==e.op)
       printf(", value %d", e.val);

@@ -7,7 +7,6 @@
 extern expression e;
 
 int ex(int op) {
-    printf("%d\n",op);
     switch(op) {
         case ADD: return OPADD;
         case MUL: return OPMUL;
@@ -42,7 +41,7 @@ node* unarNode(int op,int val,node* left) {
 node* parseP() {
     node* n;
     switch(e.op) {
-        case OPINT: initLeaf(INT,e.val);
+        case INT:   n = initLeaf(OPINT,e.val);
                     scan(&e);
                     return n;
         default:    fprintf(stderr,"Error on line %d\n",line);
