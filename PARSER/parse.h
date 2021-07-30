@@ -59,6 +59,33 @@ node* parse() {
     return n;
 }
 
+node* addSub() {
+    node* l= mulDiv();
+    //int operation = e.op;
+    if(e.op == NA) return l;
+    while(1) {
+        scan(&e);
+        node* r = mulDiv();
+        l = initNode(ex(e.op),0,l,r);
+        //operation = e.op;
+        if(e.op == NA) break;
+    }
+    return l;
+}
+
+node* mulDiv() {
+    node* l =parseP();
+    //int operation = e.op;
+    if(e.op == NA) return l;
+    while((e.op==MUL||e.op==DIV)) {
+        scan(&e);
+        node* r = parseP();
+        node* l = initNode(ex(e.op),0,l,r);
+        if(e.op==NA)break;
+    }
+    return l;
+}
+
 int evalTree(node* n) {
     int l,r;
     if(n->left) l=evalTree(n->left);
