@@ -6,13 +6,13 @@
 
 extern expression e;
 
-int* precedence[] = {0,1,1,2,2,0};
+//int* precedence[] = {0,1,1,2,2,0};
 
 int ex(int op) {
     switch(op) {
         case ADD: return OPADD;
-        case MUL: return OPMUL;
         case SUB: return OPSUB;
+        case MUL: return OPMUL;
         case DIV: return OPDIV;
         default: fprintf(stderr,"operand not identified, Line number %d\n",line);
                  exit(1);
@@ -51,53 +51,59 @@ node* parseP() {
     }
 }
 
-node* parse(int q) {
-    node* l = parseP();
-    if(e.op==NA) return l;
-    int operation = ex(e.op);
-    while(resolvePrecedence(e.op)>q) {
-        scan(&e);
-        node* r=parse(precedence[e.op]);
-        l = initNode(ex(e.op),0,l,r);
-        //node* n=initNode(operation,0,l,r);
-        if(e.op==NA)return l;
-    }
-    return l;
-}
+// node* parse(int q) {
+//     node* l = parseP();
+//     if(e.op==NA) return l;
+//     int operation = ex(e.op);
+//     while(resolvePrecedence(e.op)>q) {
+//         scan(&e);
+//         node* r=parse(precedence[e.op]);
+//         l = initNode(ex(e.op),0,l,r);
+//         //node* n=initNode(operation,0,l,r);
+//         if(e.op==NA)return l;
+//     }
+//     return l;
+// }
 
 node* mulDiv() {
     node* l =parseP();
-    if(e.op == NA) return l;
+    int operation = e.op;
+    if(operation == NA) return l;
     while((e.op==MUL||e.op==DIV)) {
         scan(&e);
         node* r = parseP();
-        node* l = initNode(ex(e.op),0,l,r);
-        if(e.op==NA)break;
+        l = initNode(ex(operation),0,l,r);
+        operation = e.op;
+        if(operation==NA)break;
     }
     return l;
 }
 
 node* addSub() {
     node* l= mulDiv();
-    //int operation = e.op;
-    if(e.op == NA) return l;
+    int operation = e.op;
+    if(operation == NA) return l;
     while(1) {
         scan(&e);
         node* r = mulDiv();
-        l = initNode(ex(e.op),0,l,r);
-        //operation = e.op;
-        if(e.op == NA) break;
+        l = initNode(ex(operation),0,l,r);
+        operation = e.op;
+        if(operation == NA) break;
     }
     return l;
 }
 
-int resolvePrecedence(int t) {
-    if(precedence[t]==0) {
-        fprintf(stderr,"error on line %d\n",line);
-        exit(1);
-    }
-    return precedence[t];
+node* parse(int q) {
+    return addSub();
 }
+
+// int resolvePrecedence(int t) {
+//     if(precedence[t]==0) {
+//         fprintf(stderr,"error on line %d\n",line);
+//         exit(1);
+//     }
+//     return precedence[t];
+// }
 
 int evalTree(node* n) {
     int l,r;
